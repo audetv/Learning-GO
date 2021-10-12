@@ -42,7 +42,7 @@ func (ph pizzasHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		if len(*ph.pizzas) == 0 {
-			http.Error(w, "Error: No pizzas found", http.StatusNotFound)
+			http.Error(w, "Error: no pizzas found", http.StatusNotFound)
 			return
 		}
 		err := json.NewEncoder(w).Encode(ph.pizzas)
@@ -67,7 +67,7 @@ func (oh ordersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		var o Order
 
 		if len(*oh.pizzas) == 0 {
-			http.Error(w, "Error: No pizzas found", http.StatusNotFound)
+			http.Error(w, "Error: no pizzas found", http.StatusNotFound)
 			return
 		}
 
