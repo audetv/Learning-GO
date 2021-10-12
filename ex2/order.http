@@ -1,0 +1,10 @@
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{"pizza_id": 1, "quantity": 4, "total": 0}
+
+###
+GET http://localhost:8080/orders
+
+###
+GET http://localhost:8080/pizzas
