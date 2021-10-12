@@ -8,20 +8,20 @@ import (
 )
 
 type Pizza struct {
-	ID    int    `json:"id"`
+	Id    int    `json:"id"`
 	Name  string `json:"name"`
 	Price int    `json:"price"`
 }
 
 type Pizzas []Pizza
 
-func (ps Pizzas) findById(ID int) (Pizza, error) {
+func (ps Pizzas) findById(id int) (Pizza, error) {
 	for _, pizza := range ps {
-		if pizza.ID == ID {
+		if pizza.Id == id {
 			return pizza, nil
 		}
 	}
-	return Pizza{}, fmt.Errorf("couldn't find pizza with ID: %d", ID)
+	return Pizza{}, fmt.Errorf("couldn't find pizza with Id: %d", id)
 }
 
 type Order struct {
@@ -45,7 +45,10 @@ func (ph pizzasHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error: No pizzas found", http.StatusNotFound)
 			return
 		}
-		json.NewEncoder(w).Encode(ph.pizzas)
+		err := json.NewEncoder(w).Encode(ph.pizzas)
+		if err != nil {
+			log.Fatal(err)
+		}
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -81,9 +84,15 @@ func (oh ordersHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		o.Total = p.Price * o.Quantity
 		*oh.orders = append(*oh.orders, o)
-		json.NewEncoder(w).Encode(o)
+		err = json.NewEncoder(w).Encode(o)
+		if err != nil {
+			log.Fatal(err)
+		}
 	case http.MethodGet:
-		json.NewEncoder(w).Encode(oh.orders)
+		err := json.NewEncoder(w).Encode(oh.orders)
+		if err != nil {
+			log.Fatal(err)
+		}
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -93,17 +102,17 @@ func main() {
 	var orders Orders
 	pizzas := Pizzas{
 		Pizza{
-			ID:    1,
+			Id:    1,
 			Name:  "Pepperoni",
 			Price: 12,
 		},
 		Pizza{
-			ID:    2,
+			Id:    2,
 			Name:  "Capricciosa",
 			Price: 11,
 		},
 		Pizza{
-			ID:    3,
+			Id:    3,
 			Name:  "Margherita",
 			Price: 10,
 		},
